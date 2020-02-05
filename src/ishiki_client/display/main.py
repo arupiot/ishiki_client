@@ -27,7 +27,6 @@ class DisplayController(TinkerforgeController):
 
         super().__init__(host, port)
 
-
     def next(self):
         if self.counter == 0:
             self.draw()
@@ -39,7 +38,6 @@ class DisplayController(TinkerforgeController):
 
         if self.counter == REFRESH_TIMEOUT:
             self.counter = 0
-
 
     # Convert PIL image to matching color bool list
     def bool_list_from_pil_image(self, image, width=296, height=128, color=(0, 0, 0)):
@@ -55,8 +53,8 @@ class DisplayController(TinkerforgeController):
         return pixels
 
     def get_image(self):
-        ## returns existing image if not None
-        ## else trys to get an image from a local file or remote url or returns None
+        # returns existing image if not None
+        # else trys to get an image from a local file or remote url or returns None
         if self.image is not None:
             return self.image
         location = config.IMAGE_URL
@@ -70,7 +68,6 @@ class DisplayController(TinkerforgeController):
         else:
             self.image = Image.open(location)
         return self.image
-
 
     def draw(self):
 
@@ -91,7 +88,6 @@ class DisplayController(TinkerforgeController):
 
                 # Draw buffered values to the display
                 self.epaper.draw()
-
 
     def write_data(self):
 
@@ -125,7 +121,7 @@ class DisplayController(TinkerforgeController):
                               BrickletEPaper296x128.ORIENTATION_HORIZONTAL,
                               "%.1f C" % self.temperature)
         self.epaper.draw()
-
+        print("temperature: %.1f C" % self.temperature)
 
     def cb_enumerate(self,
                      uid,
@@ -145,6 +141,8 @@ def start():
 
     controller = DisplayController(config.HOST, config.PORT)
     controller.run()
+    controller.stop()
+    print("goodbye")
 
 if __name__ == '__main__':
     start()

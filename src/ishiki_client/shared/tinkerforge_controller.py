@@ -2,17 +2,14 @@ import time
 from tinkerforge.ip_connection import IPConnection
 
 
-
-# oo wrapper for callback
+# oo wrapper for callback using curried callable
 class EnumerateCallback:
 
     def __init__(self, controller):
         self.controller = controller
 
     def __call__(self, *args, **kwargs):
-        print("cb")
         self.controller.cb_enumerate(*args, **kwargs)
-
 
 
 class TinkerforgeController:
@@ -22,17 +19,14 @@ class TinkerforgeController:
         # Create connection and connect to brickd
         self.ipcon = IPConnection()
         self.ipcon.connect(host, port)
+        print("connected")
 
-        print(self.ipcon)
-
-        cb = EnumerateCallback(self)
 
         # Register Enumerate Callback
-        self.ipcon.register_callback(IPConnection.CALLBACK_ENUMERATE, cb)
+        self.ipcon.register_callback(IPConnection.CALLBACK_ENUMERATE, EnumerateCallback(self))
 
         # Trigger Enumerate
         self.ipcon.enumerate()
-
 
     def run(self):
 
@@ -41,12 +35,11 @@ class TinkerforgeController:
                 time.sleep(1)
                 self.next()
             except KeyboardInterrupt:
-                print("\ngoodbye")
+
                 break
 
     def next(self):
         print("tick")
-
 
     def cb_enumerate(self,
                      uid,
@@ -72,7 +65,8 @@ class TinkerforgeController:
         print("")
 
 
-    def __del__(self):
+    def stop(self):
 
         self.ipcon.disconnect()
+        print("\ndisconnected")
 
