@@ -1,0 +1,18 @@
+*config_local.py
+*env
+drivers
+*.zip
+.vscode
+
+# osx
+*.DS_Store
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# pycharm
+.idea/
+
+secrets/

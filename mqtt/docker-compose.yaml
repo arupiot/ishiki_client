@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  mosquitto:
+    image: "paulharter/mqtt-ishiki:latest"
+    ports:
+      - 8883:8883
+    volumes:
+      - ${PWD}/../secrets/etc/mosquitto:/etc/mosquitto
