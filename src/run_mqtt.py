@@ -1,5 +1,4 @@
-from ishiki_client.mqtt.main import start
-
+from ishiki_client.mqtt_gateway.main import start
 
 if __name__ == '__main__':
     start()

@@ -1,5 +1,5 @@
 
-import ishiki_client.mqtt.config_local as local_config
+import ishiki_client.mqtt_gateway.config_local as local_config
 from ishiki_client.shared.config_helper import ConfigHelper
 
 helper = ConfigHelper(local_config)
@@ -22,7 +22,7 @@ GLOBAL_TOPIC_PREFIX = helper.string("GLOBAL_TOPIC_PREFIX", default="tinkerforge"
 DEBUG = helper.bool("DEBUG")
 NO_SYMBOLIC_RESPONSE = helper.bool("NO_SYMBOLIC_RESPONSE")
 SHOW_PAYLOAD = helper.bool("SHOW_PAYLOAD")
-INIT_FILE = helper.string("INIT_FILE", default="tinker-init.json")
+INIT_FILE = helper.string("INIT_FILE")
 
 zmq_port = helper.string("ZMQ_PORT")
 

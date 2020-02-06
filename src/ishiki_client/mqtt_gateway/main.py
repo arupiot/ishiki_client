@@ -7,7 +7,7 @@ import signal
 from collections import OrderedDict
 
 from ishiki_client.shared import tinkerforge_mqtt as tf
-import ishiki_client.mqtt.config as config
+import ishiki_client.mqtt_gateway.config as config
 
 def create_jwt_token(username, credentials_path):
 

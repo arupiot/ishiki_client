@@ -1,4 +1,4 @@
-import ishiki_client.display.config_local as local_config
+import ishiki_client.display_controller.config_local as local_config
 from ishiki_client.shared.config_helper import ConfigHelper
 
 helper = ConfigHelper(local_config)

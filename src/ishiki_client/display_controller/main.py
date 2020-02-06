@@ -8,7 +8,7 @@ from tinkerforge.bricklet_temperature import BrickletTemperature
 
 from PIL import Image
 
-import ishiki_client.display.config as config
+import ishiki_client.display_controller.config as config
 
 REFRESH_TIMEOUT = 60 * 60 * 2
 
