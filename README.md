@@ -1,8 +1,16 @@
-# ishiki_client
+y# ishiki_client
 mono repo for ishiki client side code
 
-deps:
 
+
+
+deps:
+sudo apt-get install python-dev python-setuptools
 sudo apt-get install libjpeg8-dev zlib1g-dev
+
+to avoid memory error:ls
+
+
+pip install --no-cache-dir -r requirements.txt 
 
 
