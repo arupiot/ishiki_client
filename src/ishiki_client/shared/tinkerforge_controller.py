@@ -16,7 +16,7 @@ class EnumerateCallback:
 class TinkerforgeController:
 
     def __init__(self, host, port):
-        print("hello")
+        print("hello - connecting to %s %s" % (host, port))
         # Create connection and connect to brickd
         self.ipcon = IPConnection()
         self.ipcon.connect(host, port)
