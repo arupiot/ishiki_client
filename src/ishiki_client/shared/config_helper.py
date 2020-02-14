@@ -8,7 +8,10 @@ class ConfigHelper:
         self.local_config = local_config
 
     def _lookup_var(self, name, default=None):
-        return os.environ.get(name, getattr(self.local_config, name, default))
+        if self.local_config is not None:
+            return os.environ.get(name, getattr(self.local_config, name, default))
+        else:
+            return os.environ.get(name, default)
 
     def string(self, name, default=None):
         return self._lookup_var(name, default=default)
