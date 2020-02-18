@@ -93,9 +93,36 @@ class DisplayController(TinkerforgeController):
                 # Draw buffered values to the display
                 self.e_paper_296x128.draw()
 
+            self.write_device()
+
     def write_data(self):
         ## override this in the sub class
         pass
+
+
+    def write_device(self):
+
+        self.wait_for_idle()
+        self.e_paper_296x128.set_update_mode(BrickletEPaper296x128.UPDATE_MODE_DELTA)
+        self.e_paper_296x128.draw_box(0, 96, 150, 127, True, BrickletEPaper296x128.COLOR_WHITE)
+
+
+
+        self.e_paper_296x128.draw_text(10,
+                              98,
+                              BrickletEPaper296x128.FONT_6X8,
+                              BrickletEPaper296x128.COLOR_BLACK,
+                              BrickletEPaper296x128.ORIENTATION_HORIZONTAL,
+                              config.NAME)
+
+        self.e_paper_296x128.draw_text(10,
+                              110,
+                              BrickletEPaper296x128.FONT_6X8,
+                              BrickletEPaper296x128.COLOR_BLACK,
+                              BrickletEPaper296x128.ORIENTATION_HORIZONTAL,
+                              config.DEVICE[-6:])
+
+        self.e_paper_296x128.draw()
 
     def wait_for_idle(self):
 

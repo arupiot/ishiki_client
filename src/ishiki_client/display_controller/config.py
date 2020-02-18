@@ -10,4 +10,6 @@ helper = ConfigHelper(local_config)
 
 HOST = helper.string("HOST", default="localhost")
 PORT = helper.int("PORT", 4223)
-IMAGE_URL = helper.string("IMAGE_URL", "ishiki_eink/eink.png")
+DEVICE = helper.string("DEVICE", "oxoxoxo")
+NAME = helper.string("NAME", "no name")
+IMAGE_URL = helper.string("IMAGE_URL", "ishiki_client/display_controller/eink.png")

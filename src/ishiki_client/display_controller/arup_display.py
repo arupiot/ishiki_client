@@ -11,6 +11,7 @@ class ArupDisplayController(DisplayController):
         self.pressure = None
         self.humidity = None
         self.decibels = None
+        self.motion = None
 
         super().__init__(host, port)
 
@@ -21,41 +22,38 @@ class ArupDisplayController(DisplayController):
 
             if self.air_quality is not None:
                 new_temperature = self.air_quality.get_temperature()/100.0
-                if self.temperature is not None:
-                    if abs(new_temperature - self.temperature) >= 0.1:
-                        self.temperature = new_temperature
-                        self.write_a_line("%.1f   C" % self.temperature, 0)
-                else:
-                    self.temperature = new_temperature
-                    self.write_a_line("%.1f   C" % self.temperature, 0)
+                self.update(new_temperature, "temperature", 0.1, "%.1f   C", 0)
 
                 new_humidity = self.air_quality.get_humidity() / 100.0
-                if self.humidity is not None:
-                    if abs(new_humidity - self.humidity) >= 0.1:
-                        self.humidity = new_humidity
-                        self.write_a_line("%.1f   %sRH" % (self.humidity, "%"), 1)
-                else:
-                    self.humidity = new_humidity
-                    self.write_a_line("%.1f   %sRH" % (self.humidity, "%"), 1)
-
-                new_pressure = self.air_quality.get_air_pressure() / 100.0
-                if self.pressure is not None:
-                    if abs(new_pressure - self.pressure) >= 0.1:
-                        self.pressure = new_pressure
-                        self.write_a_line("%.1f hPa" % self.pressure, 2)
-                else:
-                    self.pressure = new_pressure
-                    self.write_a_line("%.1f hPa" % self.pressure, 2)
+                self.update(new_humidity, "humidity", 0.1, "%.1f   %%RH", 1)
 
             if self.sound_pressure_level is not None:
                 new_decibels = self.sound_pressure_level.get_decibel()/10.0
-                if self.decibels is not None:
-                    if abs(new_decibels - self.decibels) >= 3:
-                        self.decibels = new_decibels
-                        self.write_a_line("%.1f   dB" % self.decibels, 3)
-                else:
-                    self.decibels = new_decibels
-                    self.write_a_line("%.1f   dB" % self.decibels, 3)
+                self.update(new_decibels, "decibels", 3, "%.1f   dB", 3)
+
+            if self.motion_detector_v2 is not None:
+                new_motion = self.motion_detector_v2.get_motion_detected()
+                self.update(new_motion, "motion", 0.5, "%s   motion", 2)
+
+            else:
+                if self.air_quality is not None:
+
+                    new_pressure = self.air_quality.get_air_pressure() / 100.0
+                    self.update(new_pressure, "pressure", 0.1, "%.1f hPa", 2)
+
+
+
+    def update(self, value, name, threshhold, format, line_number):
+
+        current = getattr(self, name)
+        if current is not None:
+            if abs(value - current) >= threshhold:
+                setattr(self, name, value)
+                self.write_a_line(format % value, line_number)
+        else:
+            setattr(self, name, value)
+            self.write_a_line(format % value, line_number)
+
 
 
     def write_a_line(self, msg, line):
@@ -77,6 +75,9 @@ class ArupDisplayController(DisplayController):
 
         self.e_paper_296x128.draw()
         print(msg)
+
+
+
 
 
 
