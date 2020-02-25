@@ -48,15 +48,8 @@ def start():
             print("Could not read init file: {}".format(str(e)))
             sys.exit(tf.ERROR_COULD_NOT_READ_INIT_FILE)
     else:
-        initial_config = {
-            "pre_connect": {
-                "%sregister/ip_connection/connected" % config.GLOBAL_TOPIC_PREFIX: {"register": True},
-                "%sregister/ip_connection/enumerate" % config.GLOBAL_TOPIC_PREFIX: {"register": True}
-            },
-            "post_connect": {
-                "%srequest/ip_connection/enumerate" % config.GLOBAL_TOPIC_PREFIX: ""
-            }
-        }
+        controller = InitController(config.IPCON_HOST, config.IPCON_PORT)
+        initial_config = controller.get_init_json()
 
     bindings = tf.MQTTBindings(config.DEBUG,
                                config.NO_SYMBOLIC_RESPONSE,
@@ -75,7 +68,7 @@ def start():
         bindings.run_config(initial_config['pre_connect'])
     bindings.connect_to_brickd(config.IPCON_HOST, config.IPCON_PORT, config.IPCON_AUTH_SECRET)
     if 'post_connect' in initial_config:
-        print("running prost_connect")
+        print("running post_connect")
         bindings.run_config(initial_config['post_connect'])
     else:
         bindings.run_config(initial_config)

@@ -77,10 +77,6 @@ class ArupDisplayController(DisplayController):
         print(msg)
 
 
-
-
-
-
 def start():
     controller = ArupDisplayController(config.HOST, config.PORT)
     controller.run()

@@ -23,7 +23,6 @@ class TinkerforgeController:
         print("connected")
         self.devices = {}
 
-
         # Register Enumerate Callback
         self.ipcon.register_callback(IPConnection.CALLBACK_ENUMERATE, EnumerateCallback(self))
 
