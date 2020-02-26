@@ -15,6 +15,10 @@ class InitController(TinkerforgeController):
 
     def __init__(self, host, port, prefix):
         self.prefix = prefix
+        self.pre_connect = {
+                "%sregister/ip_connection/connected" % self.prefix: {"register": True},
+                "%sregister/ip_connection/enumerate" % self.prefix: {"register": True}
+            }
         self.post_connect = {
                 "%srequest/ip_connection/enumerate" % self.prefix: ""
             }
@@ -25,10 +29,7 @@ class InitController(TinkerforgeController):
     def get_init_json(self):
         self.stop()
         return {
-            "pre_connect": {
-                "%sregister/ip_connection/connected" % self.prefix: {"register": True},
-                "%sregister/ip_connection/enumerate" % self.prefix: {"register": True}
-            },
+            "pre_connect": self.pre_connect,
             "post_connect": self.post_connect
         }
 
@@ -41,15 +42,20 @@ class InitController(TinkerforgeController):
                      device_identifier,
                      enumeration_type):
 
-        print("device_identifier: %s" % device_identifier)
+        # print("device_identifier: %s" % device_identifier)
 
         if device_identifier == BrickletAirQuality.DEVICE_IDENTIFIER:
             name = "%sregister/air_quality_bricklet/%s/all_values" % (self.prefix, uid)
-            self.post_connect[name] = { "register": True }
+            self.pre_connect[name] = { "register": True }
             name = "%srequest/air_quality_bricklet/%s/set_all_values_callback_configuration" % (self.prefix, uid)
             self.post_connect[name] = {"period": 10000, "value_has_to_change": False}
         if device_identifier == BrickletMotionDetectorV2.DEVICE_IDENTIFIER:
             name = "%sregister/motion_detector_v2_bricklet/%s/motion_detected" % (self.prefix, uid)
-            self.post_connect[name] = { "register": True }
+            self.pre_connect[name] = { "register": True }
             name = "%srequest/motion_detector_v2_bricklet/%s/set_sensitivity" % (self.prefix, uid)
-            self.pre_connect[name] = {"sensitivity": 50}
+            self.post_connect[name] = {"sensitivity": 50}
+        if device_identifier == BrickletSoundPressureLevel.DEVICE_IDENTIFIER:
+            name = "%sregister/sound_pressure_level_bricklet/%s/decibel" % (self.prefix, uid)
+            self.pre_connect[name] = { "register": True }
+            name = "%srequest/sound_pressure_level_bricklet/%s/set_decibel_callback_configuration" % (self.prefix, uid)
+            self.post_connect[name] = {"period": 10000, "value_has_to_change": True, "option": "i", "min": 20, "max": 100}
