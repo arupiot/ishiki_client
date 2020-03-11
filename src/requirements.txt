@@ -1,8 +1,7 @@
-paho-mqtt
 requests
 pyjwt
-pyjwt[crypto]
 cryptography
-pycrypto
-pillow
+paho-mqtt
+Pillow
 tinkerforge
+pyqrcode

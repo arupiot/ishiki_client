@@ -1,0 +1,15 @@
+FROM python:3.8-slim-buster
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends apt-utils build-essential libssl-dev libffi-dev
+
+RUN apt-get install -y python3-pil zlib1g-dev libjpeg-dev
+
+RUN mkdir /opt/ishiki
+COPY src /opt/ishiki/src
+WORKDIR /opt/ishiki/src
+
+# install dependencies
+RUN pip3 install -r requirements.txt
+
+RUN rm -rf /opt/ishiki

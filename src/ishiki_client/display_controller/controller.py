@@ -10,8 +10,6 @@ from tinkerforge.bricklet_sound_pressure_level import BrickletSoundPressureLevel
 from tinkerforge.bricklet_rgb_led_button import BrickletRGBLEDButton
 from tinkerforge.ip_connection import IPConnection
 
-
-
 from PIL import Image
 
 import ishiki_client.display_controller.config as config
@@ -55,6 +53,7 @@ class DisplayController(TinkerforgeController):
                 pixels.append(value)
 
         return pixels
+
 
     def get_image(self):
         # returns existing image if not None
@@ -105,8 +104,6 @@ class DisplayController(TinkerforgeController):
         self.wait_for_idle()
         self.e_paper_296x128.set_update_mode(BrickletEPaper296x128.UPDATE_MODE_DELTA)
         self.e_paper_296x128.draw_box(0, 96, 150, 127, True, BrickletEPaper296x128.COLOR_WHITE)
-
-
 
         self.e_paper_296x128.draw_text(10,
                               98,

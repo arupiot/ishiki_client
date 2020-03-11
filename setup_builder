@@ -1,0 +1,8 @@
+# read https://www.docker.com/blog/multi-arch-images/
+# and the docs
+# https://docs.docker.com/buildx/working-with-buildx/
+
+# create a builder
+docker buildx create --name ishiki
+docker buildx use ishiki
+docker buildx inspect --bootstrap

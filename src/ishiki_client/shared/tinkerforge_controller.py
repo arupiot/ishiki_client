@@ -48,7 +48,7 @@ class TinkerforgeController:
         if name in self.devices:
             return self.devices[name]
         else:
-            raise AttributeError("Not found %s" % name)
+            return None
 
 
     def cb_enumerate(self,

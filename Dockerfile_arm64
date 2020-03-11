@@ -1,4 +1,4 @@
-FROM arupiot/ishiki_client_base:latest
+FROM arupiot/ishiki_client_base:arm64
 
 COPY src /opt/ishiki/src
 WORKDIR /opt/ishiki/src
@@ -8,4 +8,3 @@ RUN pip3 install -r requirements.txt
 
 # run the display command
 ENTRYPOINT ["python3"]
-
