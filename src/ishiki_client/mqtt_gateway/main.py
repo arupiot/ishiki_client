@@ -6,8 +6,13 @@ import json
 import signal
 from collections import OrderedDict
 
+
 from ishiki_client.shared import tinkerforge_mqtt as tf
+
+from .init_controller import InitController
 import ishiki_client.mqtt_gateway.config as config
+
+
 
 def create_jwt_token(username, credentials_path):
 
@@ -48,7 +53,7 @@ def start():
             print("Could not read init file: {}".format(str(e)))
             sys.exit(tf.ERROR_COULD_NOT_READ_INIT_FILE)
     else:
-        controller = InitController(config.IPCON_HOST, config.IPCON_PORT)
+        controller = InitController(config.IPCON_HOST, config.IPCON_PORT, config.GLOBAL_TOPIC_PREFIX)
         initial_config = controller.get_init_json()
 
     bindings = tf.MQTTBindings(config.DEBUG,
@@ -64,11 +69,11 @@ def start():
 
     bindings.connect_to_broker(config.BROKER_HOST, config.BROKER_PORT)
     if 'pre_connect' in initial_config:
-        print("running pre_connect")
+        print("running pre_connect %s" % initial_config['pre_connect'])
         bindings.run_config(initial_config['pre_connect'])
     bindings.connect_to_brickd(config.IPCON_HOST, config.IPCON_PORT, config.IPCON_AUTH_SECRET)
     if 'post_connect' in initial_config:
-        print("running post_connect")
+        print("running post_connect: %s" % initial_config['post_connect'])
         bindings.run_config(initial_config['post_connect'])
     else:
         bindings.run_config(initial_config)
