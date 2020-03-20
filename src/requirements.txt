@@ -4,4 +4,4 @@ cryptography
 paho-mqtt
 Pillow
 tinkerforge
-pyqrcode
+qrcode

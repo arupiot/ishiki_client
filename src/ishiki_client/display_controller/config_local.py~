@@ -1,4 +1,0 @@
-HOST = "localhost"
-PORT = 4223
-IMAGE_URL = "https://github.com/arupiot/ishiki_client/raw/master/src/ishiki_client/display/eink.png"
-
