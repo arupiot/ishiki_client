@@ -8,6 +8,7 @@ RUN mkdir /opt/ishiki
 COPY src /opt/ishiki/src
 WORKDIR /opt/ishiki/src
 
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 # install dependencies
 RUN pip3 install --extra-index-url https://www.piwheels.org/simple -r requirements.txt
 
