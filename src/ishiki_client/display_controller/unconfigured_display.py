@@ -2,6 +2,7 @@ import socket
 import os
 import qrcode
 import ishiki_client
+import netifaces
 from tinkerforge.bricklet_e_paper_296x128 import BrickletEPaper296x128
 from ishiki_client.display_controller.controller import DisplayController
 import ishiki_client.display_controller.config as config
@@ -21,37 +22,24 @@ class UnconfiguredDisplayController(DisplayController):
 
         super().__init__(host, port)
 
-    def get_address(self):
-        try:
-            host_name = socket.gethostname()
-            host_ip = socket.gethostbyname(host_name)
-            print("Hostname :  ", host_name)
-            print("IP : ", host_ip)
-            return host_ip
-        except:
-            print("Unable to get Hostname and IP")
+    def get_interface(self):
+        adapters = netifaces.interfaces()
+        addresses = []
+        for adapter in adapters:
+            if adapter in ('wlan0'):
+                mac_addr = netifaces.ifaddresses(adapter)[netifaces.AF_LINK][0]['addr']
+                try:
+                    ip_addr = netifaces.ifaddresses(adapter)[netifaces.AF_INET][0]['addr']
+                except:
+                    ip_addr = 'disconnected'
+                # print(mac_addr, ip_addr)
+                return adapter, mac_addr, ip_addr
 
-    def get_ip(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        try:
-            # doesn't even have to be reachable
-            s.connect(('10.255.255.255', 1))
-            IP = s.getsockname()[0]
-        except:
-            IP = '127.0.0.1'
-        finally:
-            s.close()
-        return IP
-
-    def getMAC(interface='en0'):
-        try:
-            str = open('/sys/class/net/%s/address' % interface).read()
-        except:
-            str = "00:00:00:00:00:00"
-        return str[0:17]
-
+        return None, None, None
 
     def write_device(self):
+
+        adapter, mac_addr, ip_addr = self.get_interface()
 
         qr = qrcode.QRCode(
             version=1,
@@ -89,14 +77,14 @@ class UnconfiguredDisplayController(DisplayController):
                               BrickletEPaper296x128.FONT_6X8,
                               BrickletEPaper296x128.COLOR_BLACK,
                               BrickletEPaper296x128.ORIENTATION_HORIZONTAL,
-                              "MAC: %s" % self.getMAC())
+                              "MAC: %s" % mac_addr)
 
         self.e_paper_296x128.draw_text(10,
                               110,
                               BrickletEPaper296x128.FONT_6X8,
                               BrickletEPaper296x128.COLOR_BLACK,
                               BrickletEPaper296x128.ORIENTATION_HORIZONTAL,
-                              "IP:  %s" % self.get_ip())
+                              "IP:  %s" % ip_addr)
 
         self.e_paper_296x128.draw()
 
@@ -104,10 +92,6 @@ class UnconfiguredDisplayController(DisplayController):
 def start():
     controller = UnconfiguredDisplayController(config.HOST, config.PORT)
     controller.run()
-
-
-
-
 
 if __name__ == '__main__':
     start()

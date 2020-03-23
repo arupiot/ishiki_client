@@ -5,3 +5,4 @@ paho-mqtt
 Pillow
 tinkerforge
 qrcode
+netifaces
